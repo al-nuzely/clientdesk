@@ -1,0 +1,1533 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Client Introduction Desk</title>
+  <style>
+    :root {
+      --bg-1: #07111c;
+      --bg-2: #0f1f33;
+      --text: #f7fbff;
+      --muted: #c9d7e6;
+      --accent: #a6cf39;
+      --accent-2: #4384c5;
+      --shadow: 0 18px 40px rgba(0, 0, 0, 0.38);
+      --card-shadow: 0 12px 24px rgba(0, 0, 0, 0.22);
+      --paper-text: #1f2b38;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top, rgba(67, 132, 197, 0.18), transparent 30%),
+        linear-gradient(180deg, #102033, #07111c);
+    }
+
+    body {
+      overflow-x: hidden;
+    }
+
+    .page-shell {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .desk-section {
+      padding: 24px 28px 40px;
+      position: relative;
+    }
+
+    .desk-wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 26px;
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.02)),
+        linear-gradient(135deg, #0f2238, #17304d 45%, #0b1726);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .desk-wrap::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.02)),
+        repeating-linear-gradient(0deg,
+          rgba(255, 255, 255, 0.02) 0,
+          rgba(255, 255, 255, 0.02) 2px,
+          transparent 2px,
+          transparent 54px);
+      opacity: 0.25;
+      pointer-events: none;
+    }
+
+    .desk-grid {
+      position: relative;
+      display: grid;
+      grid-template-columns: 0.9fr 1.15fr 0.9fr;
+      grid-template-rows: auto auto auto;
+      gap: 18px 22px;
+      align-items: start;
+      background: linear-gradient(180deg, #f4f8fc, #e9f0f7);
+      padding: 18px;
+      border-radius: 4px;
+      box-shadow: inset 0 0 0 1px rgba(12, 31, 52, 0.08);
+    }
+
+    .desk-item {
+      position: relative;
+      border: none;
+      text-align: left;
+      padding: 0;
+      background: transparent;
+      cursor: pointer;
+      transition: transform 0.25s ease, filter 0.25s ease;
+    }
+
+    .desk-item:focus-visible {
+      outline: 3px solid rgba(166, 207, 57, 0.75);
+      outline-offset: 4px;
+      border-radius: 18px;
+    }
+
+    .desk-nameplate {
+      grid-column: 1 / 2;
+      grid-row: 1 / 2;
+      align-self: start;
+      justify-self: start;
+      background: linear-gradient(180deg, #17304d, #0c1d31);
+      color: white;
+      border-radius: 4px;
+      padding: 12px 16px 10px;
+      min-width: 250px;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+      border-bottom: 6px solid var(--accent);
+    }
+
+    .desk-nameplate-small {
+      font-size: 0.82rem;
+      opacity: 0.9;
+      text-align: center;
+      margin-bottom: 4px;
+    }
+
+    .desk-nameplate-main {
+      font-size: 2rem;
+      font-weight: 800;
+      text-align: center;
+      line-height: 1.05;
+    }
+
+    .video-card {
+      grid-column: 2 / 3;
+      grid-row: 1 / 2;
+      background: #ffffff;
+      color: #17304d;
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 14px;
+      border: 1px solid rgba(12, 31, 52, 0.08);
+      overflow: hidden;
+      max-width: 360px;
+      justify-self: center;
+    }
+
+    .video-header,
+    .paper-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .video-header {
+      margin-bottom: 12px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(67, 132, 197, 0.1);
+      color: #35516e;
+      font-size: 0.78rem;
+    }
+
+    .video-title {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: #17304d;
+    }
+
+    .video-shell {
+      border-radius: 18px;
+      overflow: hidden;
+      background: #09111a;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+      aspect-ratio: 16 / 9;
+      position: relative;
+    }
+
+    video,
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+      background: #09111a;
+    }
+
+    .pdf-frame {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+      background: white;
+    }
+
+    .pdf-view-shell {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .pdf-viewer-area {
+      flex: 1;
+      min-height: 0;
+      background: #1a2230;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 14px;
+      overflow: auto;
+    }
+
+    .pdf-page-wrap {
+      width: 100%;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      min-height: 0;
+    }
+
+    .pdf-frame.portrait {
+      width: min(100%, 820px);
+      height: min(78vh, 980px);
+      max-width: 100%;
+      aspect-ratio: 8.5 / 11;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+      border-radius: 8px;
+      overflow: hidden;
+      flex-shrink: 0;
+      background: #fff;
+    }
+
+    .pdf-toolbar {
+      display: flex;
+      gap: 10px;
+      padding: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      flex-wrap: wrap;
+      flex-shrink: 0;
+    }
+
+    .pdf-note {
+      color: var(--muted);
+      font-size: 0.9rem;
+      padding: 10px 16px 0;
+    }
+
+    .paper-card {
+      background: linear-gradient(180deg, #fdfcf8, #f1ece2);
+      color: var(--paper-text);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: var(--card-shadow);
+      border: 1px solid rgba(23, 48, 77, 0.12);
+      min-height: 280px;
+      overflow: hidden;
+    }
+
+    .paper-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.4), transparent 40%);
+      pointer-events: none;
+      border-radius: inherit;
+    }
+
+    .cover-letter {
+      grid-column: 2 / 3;
+      grid-row: 2 / 3;
+      transform: rotate(-3deg);
+      z-index: 2;
+    }
+
+    .cover-letter .paper-card {
+      min-height: 100%;
+      min-width: 320px;
+    }
+
+    .paper-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      margin: 14px 0 8px;
+    }
+
+    .paper-preview {
+      color: #3b4958;
+      font-size: 0.95rem;
+      line-height: 1.75;
+      display: -webkit-box;
+      -webkit-line-clamp: 9;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .paper-footer,
+    .brochure-actions,
+    .contact-actions {
+      margin-top: 16px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .linkish {
+      border: none;
+      background: var(--accent-2);
+      color: white;
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .linkish.secondary {
+      background: rgba(67, 132, 197, 0.1);
+      color: #17304d;
+      border: 1px solid rgba(67, 132, 197, 0.28);
+    }
+
+    .business-card {
+      grid-column: 3 / 4;
+      grid-row: 1 / 2;
+      transform: rotate(4deg);
+      align-self: start;
+      justify-self: end;
+      width: 230px;
+      margin-top: 8px;
+    }
+
+    .mini-card {
+      min-height: 170px;
+      border-radius: 8px;
+      background: #0b1220;
+      color: white;
+      padding: 14px;
+      box-shadow: var(--card-shadow);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .featured-doc {
+      min-height: 360px;
+    }
+
+    .featured-crisis {
+      grid-column: 1 / 2;
+      grid-row: 2 / 3;
+      transform: rotate(-10deg);
+      align-self: start;
+      margin-left: 18px;
+      margin-top: 28px;
+    }
+
+    .featured-buyers {
+      grid-column: 3 / 4;
+      grid-row: 2 / 3;
+      transform: rotate(8deg);
+      align-self: start;
+      justify-self: end;
+      margin-right: 8px;
+    }
+
+    .bottom-docs-row {
+      grid-column: 1 / 4;
+      grid-row: 3 / 4;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .brochure {
+      transform-origin: center;
+    }
+
+    .bottom-docs-row .brochure:nth-child(1) {
+      transform: rotate(-2deg);
+    }
+
+    .bottom-docs-row .brochure:nth-child(2) {
+      transform: rotate(1deg);
+    }
+
+    .bottom-docs-row .brochure:nth-child(3) {
+      transform: rotate(-1deg);
+    }
+
+    .bottom-docs-row .brochure:nth-child(4) {
+      transform: rotate(2deg);
+    }
+
+    .doc-card {
+      min-height: 168px;
+      background: linear-gradient(180deg, #fbfdfd, #edf3f7);
+      color: #1d2530;
+      border-radius: 10px;
+      padding: 14px;
+      box-shadow: var(--card-shadow);
+      border: 1px solid rgba(23, 48, 77, 0.12);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .doc-card::after {
+      content: "PDF";
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #2f6cab;
+      border: 1px solid rgba(67, 132, 197, 0.18);
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.75);
+    }
+
+    .doc-title {
+      margin: 16px 0 8px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      padding-right: 46px;
+    }
+
+    .featured-doc .doc-card {
+      min-height: 420px;
+      padding: 18px;
+      border-radius: 8px;
+    }
+
+    .featured-doc .doc-title {
+      font-size: 1.9rem;
+      line-height: 1.05;
+      margin-top: 28px;
+    }
+
+    .featured-doc .doc-summary {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      -webkit-line-clamp: unset;
+      display: block;
+    }
+
+    .featured-doc .brochure-actions {
+      margin-top: 18px;
+    }
+
+    .doc-summary {
+      color: #3b4450;
+      line-height: 1.65;
+      font-size: 0.93rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 6;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .pdf-preview-wrap {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      margin: 4px 0 10px;
+      padding: 8px;
+      background: linear-gradient(180deg, #eef3f8, #e4ebf3);
+      border-radius: 8px;
+      border: 1px solid rgba(23, 48, 77, 0.08);
+      overflow: hidden;
+    }
+
+    .pdf-preview-wrap.compact {
+      padding: 6px;
+    }
+
+    .pdf-preview-image {
+      width: auto;
+      max-width: 100%;
+      object-fit: contain;
+      display: block;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+      border-radius: 4px;
+      background: white;
+    }
+
+    .footer-note {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 28px 36px;
+      color: #c7d8ea;
+      line-height: 1.7;
+      font-size: 0.92rem;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(4, 8, 14, 0.76);
+      backdrop-filter: blur(8px);
+      z-index: 999;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-card {
+      width: min(1100px, 100%);
+      height: calc(100vh - 40px);
+      overflow: hidden;
+      background: #0f1723;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 26px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.42);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-card.pdf-portrait {
+      width: min(900px, 95vw);
+    }
+
+    .modal-card.flipbook-wide {
+      width: min(1180px, 98vw);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: linear-gradient(90deg, #17304d, #4384c5);
+    }
+
+    .modal-title-group h3 {
+      margin: 0;
+      font-size: 1.05rem;
+      color: white;
+    }
+
+    .modal-title-group p {
+      margin: 4px 0 0;
+      color: rgba(255, 255, 255, 0.86);
+      font-size: 0.9rem;
+    }
+
+    .icon-btn {
+      appearance: none;
+      border: none;
+      background: rgba(255, 255, 255, 0.14);
+      color: white;
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 1.25rem;
+    }
+
+    .modal-body {
+      overflow: auto;
+      padding: 0;
+      background: #0a1019;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .modal-body.pad {
+      padding: 26px;
+      overflow: auto;
+      background: #f8f3ea;
+      color: #1f2630;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .letter-view {
+      max-width: 850px;
+      margin: 0 auto;
+      line-height: 1.85;
+      font-size: 1rem;
+    }
+
+    .letter-view p {
+      margin: 0 0 16px;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 24px;
+      padding: 24px;
+    }
+
+    .contact-panel,
+    .business-panel {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 20px;
+    }
+
+    .contact-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .contact-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .contact-row span:first-child {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #97abc5;
+    }
+
+    .contact-row a,
+    .contact-row div:last-child {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      word-break: break-word;
+    }
+
+    .page-flip-shell {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      padding: 22px;
+      height: 100%;
+      background: #111722;
+      box-sizing: border-box;
+    }
+
+    .flip-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      width: 100%;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 5;
+    }
+
+    .flip-status {
+      color: var(--muted);
+      font-size: 0.95rem;
+      min-width: 110px;
+      text-align: center;
+    }
+
+    .flip-book {
+      width: min(760px, 100%);
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      perspective: 1800px;
+      position: relative;
+      overflow: auto;
+      padding-top: 8px;
+    }
+
+    .flip-stage {
+      width: min(720px, 100%);
+      aspect-ratio: 8.5 / 11;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .flip-page {
+      position: absolute;
+      inset: 0;
+      transform-origin: left center;
+      transform-style: preserve-3d;
+      transition: transform 0.7s ease, opacity 0.35s ease;
+      cursor: pointer;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+      background: #fff;
+    }
+
+    .flip-page.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .flip-page.turning-next {
+      transform: rotateY(-14deg);
+    }
+
+    .flip-page.turning-prev {
+      transform: rotateY(14deg);
+    }
+
+    .flip-face {
+      position: absolute;
+      inset: 0;
+      background: #fff;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    .flip-face iframe {
+      width: 100%;
+      height: calc(100% - 26px);
+      border: 0;
+      background: white;
+      display: block;
+    }
+
+    .flip-controls button {
+      border: 0;
+      border-radius: 12px;
+      padding: 10px 14px;
+      background: #1c2636;
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .flip-controls button:disabled {
+      opacity: 0.45;
+      cursor: default;
+    }
+
+    .cover-thumb {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      background: transparent;
+    }
+
+    .doc-card.compact {
+      min-height: 145px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .doc-card.compact .doc-title {
+      font-size: 0.92rem;
+      margin-top: 2px;
+      padding-right: 0;
+    }
+
+    .doc-card.compact::after {
+      display: none;
+    }
+
+    .contact-actions .linkish,
+    .contact-actions .linkish.secondary {
+      background: #0d2a5e;
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    @media (max-width: 1180px) {
+      .desk-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .desk-nameplate {
+        grid-column: 1 / 2;
+        grid-row: 1 / 2;
+      }
+
+      .video-card {
+        grid-column: 2 / 3;
+        grid-row: 1 / 2;
+      }
+
+      .business-card {
+        grid-column: 2 / 3;
+        grid-row: 2 / 3;
+      }
+
+      .featured-crisis {
+        grid-column: 1 / 2;
+        grid-row: 2 / 3;
+        margin-left: 0;
+      }
+
+      .cover-letter {
+        grid-column: 1 / 2;
+        grid-row: 3 / 4;
+      }
+
+      .featured-buyers {
+        grid-column: 2 / 3;
+        grid-row: 3 / 4;
+      }
+
+      .bottom-docs-row {
+        grid-column: 1 / 3;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 600px) {
+
+      .desk-section,
+      .footer-note {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
+      .desk-wrap {
+        padding: 14px;
+      }
+
+      .desk-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .desk-nameplate,
+      .video-card,
+      .business-card,
+      .featured-crisis,
+      .cover-letter,
+      .featured-buyers,
+      .bottom-docs-row {
+        grid-column: auto;
+        grid-row: auto;
+        transform: none;
+        justify-self: stretch;
+        width: auto;
+        max-width: none;
+        margin: 0;
+      }
+
+      .bottom-docs-row {
+        grid-template-columns: 1fr;
+      }
+
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .pdf-viewer-area {
+        padding: 10px;
+      }
+
+      .pdf-frame.portrait {
+        width: min(100%, 920px);
+        height: min(88vh, 1100px);
+        max-width: 100%;
+        aspect-ratio: 8.5 / 11;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+        border-radius: 8px;
+        overflow: hidden;
+        flex-shrink: 0;
+        background: #fff;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-shell">
+    <main class="desk-section">
+      <div class="desk-wrap">
+        <div class="desk-grid">
+          <div class="desk-nameplate">
+            <div class="desk-nameplate-small">Customized for the Desk of</div>
+            <div class="desk-nameplate-main" id="clientDeskName">Your Client Company</div>
+          </div>
+
+          <section class="video-card desk-item" aria-label="Welcome video area">
+            <div class="video-header">
+              <div>
+                <div class="video-title" id="videoCardTitle">Welcome Video</div>
+                <div class="chip" id="videoCardSubtitle">Professional introduction</div>
+              </div>
+            </div>
+            <div class="video-shell" id="videoContainer"></div>
+          </section>
+
+          <button class="business-card desk-item" data-action="open-contact"
+            aria-label="Open business card and contact information">
+            <div class="mini-card">
+              <img id="businessCardImage" src="media/business-card.png" alt="Business Card"
+                style="max-width:100%;max-height:140px;object-fit:contain;border-radius:6px;" />
+            </div>
+          </button>
+
+          <section class="featured-doc featured-crisis desk-item" id="crisisSlot"
+            aria-label="Cyber Security Crisis PDF"></section>
+
+          <button class="cover-letter desk-item" data-action="open-letter" aria-label="Open cover letter">
+            <div class="paper-card">
+              <div class="paper-meta">
+                <span class="chip" style="background: rgba(17,25,39,0.07); color:#253041;">Cover Letter</span>
+                <span style="font-size:0.85rem; color:#5c6672;">Click to enlarge</span>
+              </div>
+              <div class="paper-title" id="letterCardTitle">Letter to Prospective Clients</div>
+              <div class="paper-preview" id="letterPreview"></div>
+              <div class="paper-footer">
+                <span class="linkish secondary">Read full letter</span>
+              </div>
+            </div>
+          </button>
+
+          <section class="featured-doc featured-buyers desk-item" id="buyersSlot" aria-label="IT Buyers Guide PDF">
+          </section>
+
+          <section class="bottom-docs-row" id="brochuresContainer" aria-label="Company brochures and documents">
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <div class="footer-note">
+      Click any item on the desk to open and read the material.
+    </div>
+  </div>
+
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <h3 id="modalTitle">Document Viewer</h3>
+          <p id="modalSubtitle">Preview the document.</p>
+        </div>
+        <button class="icon-btn" id="closeModal" aria-label="Close modal">×</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <script src="client-config.js"></script>
+  <script>
+    const pageContent = {
+      clientDesk: {
+        companyName: window.CLIENT_CONFIG?.companyName || 'Your Client Company'
+      },
+      company: {
+        name: 'Memphis Computer Support, LLC',
+        tagline: 'Managed IT and cybersecurity services.',
+        contactName: 'Melanie Suria',
+        title: 'Founder & CEO',
+        email: 'melanie@memphiscomputersupport.com',
+        phone: '(901) 496-8949',
+        website: 'https://memphiscomputersupport.com',
+        address: ''
+      },
+      businessCardImage: 'media/business-card.png',
+      logoImage: 'media/mcs-logo.png',
+      coverLetterPdf: 'docs/cover-letter.pdf',
+      video: {
+        title: 'Welcome to Our Company',
+        subtitle: 'Professional introduction',
+        source: 'media/welcome-video.mp4',
+        poster: 'media/video-poster.jpg',
+        embed: false
+      },
+      coverLetter: {
+        title: 'Letter to Prospective Clients',
+        subtitle: 'From the Desk of Melanie Suria',
+        body: `
+          <div class="letter-view">
+            <div style="text-align:center;margin-bottom:20px;">
+              <img src="media/mcs-logo.png" alt="Memphis Computer Support" style="max-width:320px;width:100%;height:auto;" />
+            </div>
+
+            <p><strong>From the Desk of:</strong> Melanie Suria<br>
+            Founder & CEO, Memphis Computer Support, LLC</p>
+
+            <p><strong>Date:</strong></p>
+
+            <p>Dear CEO / Leadership Team,</p>
+
+            <p>
+              I'm enclosing some important information about Memphis Computer Support, LLC
+              to give you a clearer understanding of our services and what sets us apart.
+            </p>
+
+            <p>
+              To get a better idea of how we can support your IT needs, please review the
+              materials included in this introduction package. Each document has been selected
+              to give you a clearer picture of our company, our services, our approach to IT
+              support, and the standards we believe every client should expect from their IT provider.
+            </p>
+
+            <p>
+              These materials include information about who we are, how we help businesses,
+              what makes our service different, the common risks companies face when IT is not
+              properly managed, and the commitments we make to our clients.
+            </p>
+
+            <p>
+              Together, these resources are intended to help you better understand the value
+              Memphis Computer Support, LLC brings to the organizations we serve.
+            </p>
+
+            <p>
+              If you have any questions, feel free to reach out to us at:<br>
+              <strong>(901) 496-8949</strong>
+            </p>
+
+            <p>Dedicated to serving you,</p>
+
+            <p>
+              <strong>Melanie Suria</strong><br>
+              Founder & CEO<br>
+              Memphis Computer Support, LLC
+            </p>
+          </div>
+        `
+      },
+      brochures: [
+        {
+          title: 'The Cyber Security Crisis',
+          summary: 'Overview of the current cyber threat environment and why proactive protection matters.',
+          file: 'docs/the-cyber-security-crisis.pdf',
+          coverImage: 'previews/cyber-security-crisis.png',
+          flipBook: true,
+          pageCount: 6
+        },
+        {
+          title: 'IT Buyers Guide',
+          summary: 'Guide to help decision-makers evaluate IT providers and services.',
+          file: 'docs/it-buyers-guide.pdf',
+          coverImage: 'previews/it-buyers-guide.png',
+          flipBook: true,
+          pageCount: 19
+        },
+        {
+          title: '6 Things We Do Better',
+          summary: 'Comparison showing the service and security advantages we deliver.',
+          file: 'docs/6-things-we-do-better.pdf',
+          coverImage: 'previews/6-things-we-do-better.png',
+          flipBook: true,
+          pageCount: 1
+        },
+        {
+          title: 'Why Cheap IT Costs You More',
+          summary: 'Explanation of the hidden costs and risks of low-cost IT support.',
+          file: 'docs/why-cheap-it-costs-you-more.pdf',
+          coverImage: 'previews/why-cheap-it-costs-you-more.png',
+          flipBook: true,
+          pageCount: 1
+        },
+        {
+          title: 'Client Bill of Rights',
+          summary: 'Statement of the responsiveness and professionalism clients should expect.',
+          file: 'docs/client-bill-of-rights.pdf',
+          coverImage: 'previews/client-bill-of-rights.png',
+          flipBook: true,
+          pageCount: 1
+        },
+        {
+          title: '30 Days Money Back Guarantee',
+          summary: 'Explanation of our service guarantee and commitment to satisfaction.',
+          file: 'docs/30-days-money-back-guarantee.pdf',
+          coverImage: 'previews/30-days-money-back-guarantee.png',
+          flipBook: true,
+          pageCount: 1
+        }
+      ]
+    };
+
+    const modal = document.getElementById('modal');
+    const modalBody = document.getElementById('modalBody');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalSubtitle = document.getElementById('modalSubtitle');
+    const closeModalBtn = document.getElementById('closeModal');
+
+    function setText(id, value) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = value;
+    }
+
+    function renderVideo() {
+      setText('videoCardTitle', pageContent.video.title);
+      setText('videoCardSubtitle', pageContent.video.subtitle);
+
+      const container = document.getElementById('videoContainer');
+      if (!container) return;
+
+      if (pageContent.video.embed) {
+        container.innerHTML = `<iframe src="${pageContent.video.source}" title="${pageContent.video.title}" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+      } else {
+        container.innerHTML = `
+          <video id="deskVideo" autoplay muted loop playsinline poster="${pageContent.video.poster || ''}" style="cursor:pointer;">
+            <source src="${pageContent.video.source}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        `;
+
+        const video = document.getElementById('deskVideo');
+        if (video) {
+          video.addEventListener('click', () => {
+            if (video.requestFullscreen) video.requestFullscreen();
+            else if (video.webkitRequestFullscreen) video.webkitRequestFullscreen();
+            else if (video.msRequestFullscreen) video.msRequestFullscreen();
+            video.muted = false;
+            video.controls = true;
+          });
+        }
+      }
+    }
+
+    function renderLetterPreview() {
+      const tmp = document.createElement('div');
+      tmp.innerHTML = pageContent.coverLetter.body;
+      setText('letterCardTitle', pageContent.coverLetter.title);
+      setText('letterPreview', tmp.textContent.replace(/\s+/g, ' ').trim());
+    }
+
+    function renderBusinessCard() {
+      const img = document.getElementById('businessCardImage');
+      if (img) {
+        img.src = pageContent.businessCardImage;
+        img.alt = `${pageContent.company.name} business card`;
+      }
+    }
+
+    function brochureInnerHtml(item, compact = false) {
+      const compactClass = compact ? ' compact' : '';
+      const imageHeight = compact ? '150px' : '320px';
+      const imageHtml = item.coverImage
+        ? `
+          <div class="pdf-preview-wrap ${compact ? 'compact' : ''}">
+            <img src="${item.coverImage}" alt="${item.title} preview" class="pdf-preview-image" style="height:${imageHeight};" />
+          </div>
+        `
+        : '';
+
+      return `
+        <div class="doc-card${compactClass}">
+          ${imageHtml}
+          <div class="doc-title">${item.title}</div>
+          <div class="brochure-actions">
+            <span class="linkish secondary">Open PDF</span>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderBrochures() {
+      const crisis = pageContent.brochures.find(item => item.title === 'The Cyber Security Crisis');
+      const buyers = pageContent.brochures.find(item => item.title === 'IT Buyers Guide');
+      const bottomDocs = pageContent.brochures.filter(item => !['The Cyber Security Crisis', 'IT Buyers Guide'].includes(item.title));
+
+      const crisisIndex = pageContent.brochures.findIndex(item => item.title === 'The Cyber Security Crisis');
+      const buyersIndex = pageContent.brochures.findIndex(item => item.title === 'IT Buyers Guide');
+
+      const crisisSlot = document.getElementById('crisisSlot');
+      const buyersSlot = document.getElementById('buyersSlot');
+      const container = document.getElementById('brochuresContainer');
+
+      if (crisis && crisisSlot) {
+        crisisSlot.setAttribute('data-action', 'open-pdf');
+        crisisSlot.setAttribute('data-index', crisisIndex);
+        crisisSlot.innerHTML = brochureInnerHtml(crisis, false);
+      }
+
+      if (buyers && buyersSlot) {
+        buyersSlot.setAttribute('data-action', 'open-pdf');
+        buyersSlot.setAttribute('data-index', buyersIndex);
+        buyersSlot.innerHTML = brochureInnerHtml(buyers, false);
+      }
+
+      if (container) {
+        container.innerHTML = bottomDocs.map((item) => {
+          const index = pageContent.brochures.findIndex(entry => entry.title === item.title);
+          return `
+            <article class="brochure desk-item" tabindex="0" role="button" aria-label="Open ${item.title}" data-action="open-pdf" data-index="${index}">
+              ${brochureInnerHtml(item, true)}
+            </article>
+          `;
+        }).join('');
+      }
+    }
+
+    function getPdfViewerSrc(src, fitMode = 'FitH') {
+      if (!src) return '';
+      const joiner = src.includes('#') ? '&' : '#';
+      return `${src}${joiner}toolbar=0&navpanes=0&scrollbar=0&view=${fitMode}&zoom=145`;
+    }
+
+    function buildPdfPages(file, pageCount) {
+      const total = Number(pageCount) || 0;
+      return Array.from({ length: total }, (_, i) => `${file}#page=${i + 1}`);
+    }
+
+    function openModal({ title, subtitle = '', mode = 'html', content = '', cardClass = '' }) {
+      modalTitle.textContent = title;
+      modalSubtitle.textContent = subtitle;
+      modalBody.className = mode === 'pad' ? 'modal-body pad' : 'modal-body';
+
+      const card = modal.querySelector('.modal-card');
+      if (card) {
+        card.className = `modal-card${cardClass ? ' ' + cardClass : ''}`;
+      }
+
+      modalBody.innerHTML = content;
+      modal.classList.add('active');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+
+      requestAnimationFrame(() => {
+        const cardEl = modal.querySelector('.modal-card');
+        const headerEl = modal.querySelector('.modal-header');
+
+        if (cardEl && headerEl) {
+          const bodyHeight = cardEl.clientHeight - headerEl.offsetHeight;
+          modalBody.style.height = bodyHeight + 'px';
+
+          const shell = modalBody.querySelector('.page-flip-shell');
+          const book = modalBody.querySelector('.flip-book');
+          const controls = modalBody.querySelector('.flip-controls');
+          const stage = modalBody.querySelector('.flip-stage');
+
+          if (shell) shell.style.height = bodyHeight + 'px';
+          if (book) book.style.height = (bodyHeight - 24) + 'px';
+
+          if (book && controls && stage) {
+            const availableHeight = bodyHeight - controls.offsetHeight - 36;
+            const availableWidth = book.clientWidth - 8;
+            const ratio = 8.5 / 11;
+
+            const widthFromHeight = availableHeight * ratio;
+            const finalWidth = Math.min(720, availableWidth, widthFromHeight);
+
+            if (finalWidth > 0) {
+              stage.style.width = `${finalWidth}px`;
+              stage.style.height = `${finalWidth / ratio}px`;
+            }
+          }
+        }
+      });
+    }
+
+    function closeModal() {
+      modal.classList.remove('active');
+      modal.setAttribute('aria-hidden', 'true');
+      modalBody.innerHTML = '';
+      modalBody.style.height = '';
+
+      const stage = modal.querySelector('.flip-stage');
+      const shell = modal.querySelector('.page-flip-shell');
+      const book = modal.querySelector('.flip-book');
+
+      if (stage) {
+        stage.style.width = '';
+        stage.style.height = '';
+      }
+      if (shell) shell.style.height = '';
+      if (book) book.style.height = '';
+
+      const card = modal.querySelector('.modal-card');
+      if (card) card.className = 'modal-card';
+      document.body.style.overflow = '';
+    }
+
+    function openCoverLetter() {
+      openModal({
+        cardClass: 'pdf-portrait',
+        title: pageContent.coverLetter.title,
+        subtitle: pageContent.coverLetter.subtitle,
+        mode: 'pad',
+        content: pageContent.coverLetter.body
+      });
+    }
+
+    function openBusinessCard() {
+      const telHref = `tel:${pageContent.company.phone.replace(/[^\d+]/g, '')}`;
+      const mailHref = `mailto:${pageContent.company.email}`;
+      const addressRow = pageContent.company.address
+        ? `<div class="contact-row"><span>Address</span><div>${pageContent.company.address}</div></div>`
+        : '';
+
+      openModal({
+        cardClass: 'flipbook-wide',
+        title: `${pageContent.company.name} Contact Information`,
+        subtitle: 'Business card and direct contact actions',
+        content: `
+          <div class="contact-grid">
+            <div class="business-panel">
+              <div style="display:flex;align-items:center;justify-content:center;background:#0b1220;border-radius:12px;padding:20px;min-height:260px;">
+                <img src="${pageContent.businessCardImage}" alt="Business Card" style="max-width:100%;height:auto;border-radius:8px;" />
+              </div>
+            </div>
+            <div class="contact-panel">
+              <h3 style="margin-top:0;">Contact details</h3>
+              <p style="margin:0; color: var(--muted); line-height:1.7;">Use the actions below to email, call, or visit the website.</p>
+              <div class="contact-list">
+                <div class="contact-row"><span>Primary Contact</span><div>${pageContent.company.contactName}</div></div>
+                <div class="contact-row"><span>Email</span><a href="${mailHref}">${pageContent.company.email}</a></div>
+                <div class="contact-row"><span>Phone</span><a href="${telHref}">${pageContent.company.phone}</a></div>
+                <div class="contact-row"><span>Website</span><a href="${pageContent.company.website}" target="_blank" rel="noopener noreferrer">${pageContent.company.website}</a></div>
+                ${addressRow}
+              </div>
+              <div class="contact-actions">
+                <a class="linkish" href="${mailHref}">Email us</a>
+                <a class="linkish secondary" href="${telHref}">Call now</a>
+                <a class="linkish secondary" href="${pageContent.company.website}" target="_blank" rel="noopener noreferrer">Visit website</a>
+              </div>
+            </div>
+          </div>
+        `
+      });
+    }
+
+    function buildFlipBook(item) {
+      let pages = Array.isArray(item.pages) ? item.pages : [];
+
+      if (!pages.length && item.pageCount) {
+        pages = buildPdfPages(item.file, item.pageCount);
+      }
+
+      if (!pages.length) {
+        return `
+          <div class="pdf-view-shell">
+            <div class="pdf-viewer-area">
+              <div class="pdf-page-wrap">
+                <iframe class="pdf-frame portrait" src="${getPdfViewerSrc(item.file, 'FitH')}" title="${item.title}"></iframe>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      const pagesHtml = pages.map((page, i) => `
+        <div class="flip-page${i === 0 ? '' : ' hidden'}" data-page-index="${i}">
+          <div class="flip-face">
+            <iframe class="pdf-frame" src="${getPdfViewerSrc(page, 'FitH')}" title="${item.title} page ${i + 1}"></iframe>
+          </div>
+        </div>
+      `).join('');
+
+      return `
+        <div class="page-flip-shell">
+          ${pages.length > 1 ? `
+            <div class="flip-controls">
+              <button type="button" id="prevFlipBtn">Previous</button>
+              <div class="flip-status" id="flipStatus">Page 1 of ${pages.length}</div>
+              <button type="button" id="nextFlipBtn">Next</button>
+            </div>
+          ` : `
+            <div class="flip-controls">
+              <div class="flip-status" id="flipStatus">Page 1 of 1</div>
+            </div>
+          `}
+          <div class="flip-book">
+            <div class="flip-stage" id="flipStage">${pagesHtml}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function initFlipBook() {
+      const stage = document.getElementById('flipStage');
+      if (!stage) return;
+
+      const pages = Array.from(stage.querySelectorAll('.flip-page'));
+      const nextBtn = document.getElementById('nextFlipBtn');
+      const prevBtn = document.getElementById('prevFlipBtn');
+      const status = document.getElementById('flipStatus');
+      let current = 0;
+      let animating = false;
+
+      function updateButtons() {
+        if (prevBtn) prevBtn.disabled = current === 0 || animating;
+        if (nextBtn) nextBtn.disabled = current === pages.length - 1 || animating;
+        if (status) status.textContent = `Page ${current + 1} of ${pages.length}`;
+      }
+
+      function showPage(index, direction) {
+        if (index < 0 || index >= pages.length || animating || index === current) return;
+        animating = true;
+
+        const oldPage = pages[current];
+        const newPage = pages[index];
+        newPage.classList.remove('hidden', 'turning-next', 'turning-prev');
+        newPage.style.zIndex = '3';
+        oldPage.style.zIndex = '2';
+
+        oldPage.classList.remove('turning-next', 'turning-prev');
+        void oldPage.offsetWidth;
+        oldPage.classList.add(direction === 'next' ? 'turning-next' : 'turning-prev');
+
+        setTimeout(() => {
+          oldPage.classList.add('hidden');
+          oldPage.classList.remove('turning-next', 'turning-prev');
+          oldPage.style.zIndex = '';
+          newPage.style.zIndex = '';
+          current = index;
+          animating = false;
+          updateButtons();
+        }, 360);
+
+        updateButtons();
+      }
+
+      if (nextBtn) nextBtn.onclick = () => showPage(current + 1, 'next');
+      if (prevBtn) prevBtn.onclick = () => showPage(current - 1, 'prev');
+
+      pages.forEach((page, index) => {
+        page.addEventListener('click', () => {
+          if (index < pages.length - 1) showPage(index + 1, 'next');
+        });
+      });
+
+      updateButtons();
+    }
+
+    function openPdf(index) {
+      const item = pageContent.brochures[index];
+      if (!item) return;
+
+      openModal({
+        title: item.title,
+        subtitle: item.flipBook ? 'Page flip viewer' : 'PDF viewer',
+        cardClass: item.flipBook ? 'flipbook-wide' : 'pdf-portrait',
+        content: item.flipBook ? buildFlipBook(item) : `
+          <div class="pdf-view-shell">
+            <div class="pdf-toolbar">
+              <a class="linkish" href="${item.file}" target="_blank" rel="noopener noreferrer">Open in new tab</a>
+            </div>
+            <div class="pdf-note">The page is fitted to the same viewer size and allows scrolling if needed.</div>
+            <div class="pdf-viewer-area">
+              <div class="pdf-page-wrap">
+                <iframe class="pdf-frame portrait" src="${getPdfViewerSrc(item.file, 'FitH')}" title="${item.title}"></iframe>
+              </div>
+            </div>
+          </div>
+        `
+      });
+
+      if (item.flipBook) initFlipBook();
+    }
+
+    function handleAction(action, target) {
+      switch (action) {
+        case 'open-letter':
+          openCoverLetter();
+          break;
+        case 'open-contact':
+          openBusinessCard();
+          break;
+        case 'open-pdf':
+          openPdf(Number(target.dataset.index));
+          break;
+      }
+    }
+
+    document.addEventListener('click', (event) => {
+      const actionEl = event.target.closest('[data-action]');
+      if (actionEl) {
+        event.preventDefault();
+        handleAction(actionEl.dataset.action, actionEl);
+      }
+
+      if (event.target === modal) closeModal();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && modal.classList.contains('active')) {
+        closeModal();
+      }
+
+      const focused = document.activeElement;
+      if ((event.key === 'Enter' || event.key === ' ') && focused?.dataset?.action === 'open-pdf') {
+        event.preventDefault();
+        handleAction('open-pdf', focused);
+      }
+    });
+
+    closeModalBtn.addEventListener('click', closeModal);
+
+    renderVideo();
+    renderLetterPreview();
+    renderBusinessCard();
+    setText('clientDeskName', pageContent.clientDesk.companyName);
+    renderBrochures();
+
+    console.assert(document.getElementById('businessCardImage'), 'business card image element should exist');
+    console.assert(typeof pageContent.company.email === 'string' && pageContent.company.email.includes('@'), 'company email should be valid');
+    console.assert(Array.isArray(pageContent.brochures) && pageContent.brochures.length === 6, 'brochures should contain exactly 6 items');
+    console.assert(pageContent.brochures.every(item => typeof item.title === 'string' && typeof item.file === 'string'), 'every brochure should have a title and file');
+    console.assert(typeof renderVideo === 'function', 'renderVideo should exist');
+    console.assert(getPdfViewerSrc('docs/test.pdf').includes('toolbar=0'), 'PDF viewer URL should include toolbar control');
+  </script>
+</body>
+
+</html>
