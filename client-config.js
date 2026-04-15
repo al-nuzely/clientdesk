@@ -1,3 +1,3 @@
 window.CLIENT_CONFIG = {
-  companyName: "MCS"
+  companyName: "Memphis Computer Support"
 };
