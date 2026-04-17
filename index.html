@@ -230,8 +230,8 @@
     }
 
     .pdf-frame.portrait {
-      width: min(100%, 820px);
-      height: min(78vh, 980px);
+      width: min(100%, 920px);
+      height: min(88vh, 1100px);
       max-width: 100%;
       aspect-ratio: 8.5 / 11;
       box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
@@ -492,12 +492,21 @@
 
     .pdf-preview-image {
       width: auto;
-      max-width: 100%;
+      max-width: 92%;
       object-fit: contain;
       display: block;
       box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
       border-radius: 4px;
       background: white;
+      margin: 0 auto;
+    }
+
+    .featured-doc .pdf-preview-wrap {
+      padding: 10px;
+    }
+
+    .featured-doc .pdf-preview-image {
+      max-width: 88%;
     }
 
     .footer-note {
@@ -538,7 +547,7 @@
     }
 
     .modal-card.pdf-portrait {
-      width: min(900px, 95vw);
+      width: min(980px, 96vw);
     }
 
     .modal-card.flipbook-wide {
@@ -585,6 +594,10 @@
       background: #0a1019;
       flex: 1;
       min-height: 0;
+    }
+
+    .modal-body.no-scroll {
+      overflow: hidden;
     }
 
     .modal-body.pad {
@@ -658,10 +671,12 @@
       flex-direction: column;
       align-items: center;
       gap: 14px;
-      padding: 22px;
+      padding: 18px;
       height: 100%;
       background: #111722;
       box-sizing: border-box;
+      overflow: hidden;
+      touch-action: pan-x;
     }
 
     .flip-controls {
@@ -684,20 +699,23 @@
     }
 
     .flip-book {
-      width: min(760px, 100%);
+      width: 100%;
       flex: 1;
       min-height: 0;
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       justify-content: center;
       perspective: 1800px;
       position: relative;
-      overflow: auto;
-      padding-top: 8px;
+      overflow: hidden;
+      padding: 0;
+      touch-action: pan-x;
     }
 
     .flip-stage {
-      width: min(720px, 100%);
+      width: min(760px, 100%);
+      height: 100%;
+      max-height: 100%;
       aspect-ratio: 8.5 / 11;
       position: relative;
       display: flex;
@@ -705,6 +723,7 @@
       justify-content: center;
       flex-shrink: 0;
       overflow: hidden;
+      border-radius: 16px;
     }
 
     .flip-page {
@@ -712,12 +731,13 @@
       inset: 0;
       transform-origin: left center;
       transform-style: preserve-3d;
-      transition: transform 0.7s ease, opacity 0.35s ease;
+      transition: transform 0.45s ease, opacity 0.25s ease;
       cursor: pointer;
       border-radius: 14px;
       overflow: hidden;
       box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
       background: #fff;
+      border: 8px solid #d8dee7;
     }
 
     .flip-page.hidden {
@@ -739,16 +759,17 @@
       background: #fff;
       overflow: hidden;
       display: flex;
-      align-items: flex-start;
-      justify-content: center;
+      align-items: stretch;
+      justify-content: stretch;
     }
 
     .flip-face iframe {
       width: 100%;
-      height: calc(100% - 26px);
+      height: 100%;
       border: 0;
       background: white;
       display: block;
+      overflow: hidden;
     }
 
     .flip-controls button {
@@ -873,7 +894,32 @@
         margin: 0;
       }
 
+      .desk-nameplate {
+        order: 1;
+      }
+
+      .video-card {
+        order: 2;
+      }
+
+      .cover-letter {
+        order: 3;
+      }
+
+      .business-card {
+        order: 4;
+      }
+
+      .featured-crisis {
+        order: 5;
+      }
+
+      .featured-buyers {
+        order: 6;
+      }
+
       .bottom-docs-row {
+        order: 7;
         grid-template-columns: 1fr;
       }
 
@@ -886,15 +932,54 @@
       }
 
       .pdf-frame.portrait {
-        width: min(100%, 920px);
-        height: min(88vh, 1100px);
+        width: 100%;
+        height: 72vh;
         max-width: 100%;
-        aspect-ratio: 8.5 / 11;
-        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
-        border-radius: 8px;
+      }
+
+      .modal {
+        padding: 0;
+      }
+
+      .modal-card.pdf-portrait,
+      .modal-card.flipbook-wide {
+        width: 100vw;
+        height: 100vh;
+        border-radius: 0;
+      }
+
+      .page-flip-shell {
+        padding: 10px;
+      }
+
+      .flip-controls {
+        gap: 8px;
+      }
+
+      .flip-controls button {
+        padding: 8px 10px;
+        font-size: 0.88rem;
+      }
+
+      .flip-status {
+        font-size: 0.85rem;
+        min-width: auto;
+      }
+
+      .flip-book {
+        width: 100%;
         overflow: hidden;
-        flex-shrink: 0;
-        background: #fff;
+      }
+
+      .flip-stage {
+        width: 100%;
+        max-width: 320px;
+        height: auto;
+        aspect-ratio: 8.5 / 11;
+      }
+
+      .flip-face iframe {
+        pointer-events: none;
       }
     }
   </style>
@@ -1162,7 +1247,7 @@
 
     function brochureInnerHtml(item, compact = false) {
       const compactClass = compact ? ' compact' : '';
-      const imageHeight = compact ? '150px' : '320px';
+      const imageHeight = compact ? '160px' : '200px';
       const imageHtml = item.coverImage
         ? `
           <div class="pdf-preview-wrap ${compact ? 'compact' : ''}">
@@ -1234,6 +1319,10 @@
       modalSubtitle.textContent = subtitle;
       modalBody.className = mode === 'pad' ? 'modal-body pad' : 'modal-body';
 
+      if (cardClass.includes('flipbook-wide')) {
+        modalBody.classList.add('no-scroll');
+      }
+
       const card = modal.querySelector('.modal-card');
       if (card) {
         card.className = `modal-card${cardClass ? ' ' + cardClass : ''}`;
@@ -1261,16 +1350,18 @@
           if (book) book.style.height = (bodyHeight - 24) + 'px';
 
           if (book && controls && stage) {
-            const availableHeight = bodyHeight - controls.offsetHeight - 36;
-            const availableWidth = book.clientWidth - 8;
+            const availableHeight = bodyHeight - controls.offsetHeight - 24;
+            const availableWidth = book.clientWidth - 24;
             const ratio = 8.5 / 11;
 
             const widthFromHeight = availableHeight * ratio;
-            const finalWidth = Math.min(720, availableWidth, widthFromHeight);
+            const finalWidth = Math.min(760, availableWidth, widthFromHeight);
+            const finalHeight = finalWidth / ratio;
 
-            if (finalWidth > 0) {
+            if (finalWidth > 0 && finalHeight > 0) {
               stage.style.width = `${finalWidth}px`;
-              stage.style.height = `${finalWidth / ratio}px`;
+              stage.style.height = `${finalHeight}px`;
+              stage.style.maxHeight = `${availableHeight}px`;
             }
           }
         }
@@ -1282,6 +1373,7 @@
       modal.setAttribute('aria-hidden', 'true');
       modalBody.innerHTML = '';
       modalBody.style.height = '';
+      modalBody.className = 'modal-body';
 
       const stage = modal.querySelector('.flip-stage');
       const shell = modal.querySelector('.page-flip-shell');
@@ -1290,6 +1382,7 @@
       if (stage) {
         stage.style.width = '';
         stage.style.height = '';
+        stage.style.maxHeight = '';
       }
       if (shell) shell.style.height = '';
       if (book) book.style.height = '';
@@ -1403,8 +1496,12 @@
       const nextBtn = document.getElementById('nextFlipBtn');
       const prevBtn = document.getElementById('prevFlipBtn');
       const status = document.getElementById('flipStatus');
+
       let current = 0;
       let animating = false;
+      let startX = 0;
+      let startY = 0;
+      let touchActive = false;
 
       function updateButtons() {
         if (prevBtn) prevBtn.disabled = current === 0 || animating;
@@ -1418,6 +1515,7 @@
 
         const oldPage = pages[current];
         const newPage = pages[index];
+
         newPage.classList.remove('hidden', 'turning-next', 'turning-prev');
         newPage.style.zIndex = '3';
         oldPage.style.zIndex = '2';
@@ -1434,7 +1532,7 @@
           current = index;
           animating = false;
           updateButtons();
-        }, 360);
+        }, 300);
 
         updateButtons();
       }
@@ -1444,9 +1542,37 @@
 
       pages.forEach((page, index) => {
         page.addEventListener('click', () => {
-          if (index < pages.length - 1) showPage(index + 1, 'next');
+          if (window.innerWidth > 768 && index < pages.length - 1) {
+            showPage(index + 1, 'next');
+          }
         });
       });
+
+      stage.addEventListener('touchstart', (e) => {
+        if (!e.touches || e.touches.length !== 1) return;
+        touchActive = true;
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+      }, { passive: true });
+
+      stage.addEventListener('touchend', (e) => {
+        if (!touchActive || !e.changedTouches || e.changedTouches.length !== 1) return;
+        touchActive = false;
+
+        const endX = e.changedTouches[0].clientX;
+        const endY = e.changedTouches[0].clientY;
+
+        const dx = endX - startX;
+        const dy = endY - startY;
+
+        if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+          if (dx < 0) {
+            showPage(current + 1, 'next');
+          } else {
+            showPage(current - 1, 'prev');
+          }
+        }
+      }, { passive: true });
 
       updateButtons();
     }
